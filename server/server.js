@@ -20,6 +20,7 @@ app.use(cookieParser());
 const { User } = require('./models/user');
 const { Brand } = require('./models/brand');
 const { auth } = require('./middleware/auth');
+const { admin } = require('./middleware/admin');
 // USERS
 app.post('/api/users/register', (req, res) => {
   
@@ -48,7 +49,7 @@ app.get('/api/users/auth', auth, (req, res)=>{
 /************** BRANDS ************** */
 /************************************ */
 
-app.post('/api/product/brand', auth, async (req,res)=>{
+app.post('/api/product/brand', auth, admin, async (req,res)=>{
   const brand = new Brand(req.body);
   try {
     const doc = await brand.save();
