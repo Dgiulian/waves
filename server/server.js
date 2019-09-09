@@ -60,6 +60,16 @@ app.post('/api/product/brand', auth, admin, async (req,res)=>{
 
 });
 
+app.get('/api/product/brands', async (req, res)=>{
+  try {
+
+    const brands = await Brand.find();
+    return res.json({success: true, brands});
+  } catch(e) {
+    console.error(e);
+    return res.status(400).send(e);
+  }
+});
 
 app.get('/api/users/logout', async (req, res)=>{
   try {
