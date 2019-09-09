@@ -44,6 +44,21 @@ app.get('/api/users/auth', auth, (req, res)=>{
   });
 });
 
+/************************************ */
+/************** BRANDS ************** */
+/************************************ */
+
+app.post('/api/product/brand', auth, async (req,res)=>{
+  const brand = new Brand(req.body);
+  try {
+    const doc = await brand.save();
+    res.json({success: true, brand: doc});
+  } catch (e) {
+    res.json({success: false, error: e });
+  }
+
+});
+
 
 app.get('/api/users/logout', async (req, res)=>{
   try {

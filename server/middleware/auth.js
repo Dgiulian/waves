@@ -5,9 +5,7 @@ let auth = async (req,res, next) =>{
     return res.status(401);
   }
   try {
-    console.log(token);
     const user = await User.findByToken(token);
-    console.log('User ', user);
     if(!user) {
       return res.json({
         isAuth: false,
