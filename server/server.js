@@ -19,6 +19,7 @@ app.use(cookieParser());
 // Models 
 const { User } = require('./models/user');
 const { Brand } = require('./models/brand');
+const  { Wood }  = require('./models/wood');
 const { auth } = require('./middleware/auth');
 const { admin } = require('./middleware/admin');
 // USERS
@@ -45,44 +46,6 @@ app.get('/api/users/auth', auth, (req, res)=>{
   });
 });
 
-/************************************ */
-/************** BRANDS ************** */
-/************************************ */
-
-app.post('/api/product/brand', auth, admin, async (req,res)=>{
-  const brand = new Brand(req.body);
-  try {
-    const doc = await brand.save();
-    res.json({success: true, brand: doc});
-  } catch (e) {
-    res.json({success: false, error: e });
-  }
-
-});
-
-app.get('/api/product/brands', async (req, res)=>{
-  try {
-
-    const brands = await Brand.find();
-    return res.json({success: true, brands});
-  } catch(e) {
-    console.error(e);
-    return res.status(400).send(e);
-  }
-});
-
-app.get('/api/users/logout', async (req, res)=>{
-  try {
-    await User.findOneAndUpdate({_id: req.user._id}, { token: ''});
-    return res.json({
-      success: true,
-    });    
-  } catch (error) {
-    return res.json({
-      success: false,
-    });
-  }
-});
 
 app.post('/api/users/login', async (req, res) => {
   // Get the email
@@ -112,6 +75,70 @@ app.post('/api/users/login', async (req, res) => {
     return res.json({ success: false, message: '"Auth failed: Password did not match' });
   }
 });
+
+app.get('/api/users/logout', async (req, res)=>{
+  try {
+    await User.findOneAndUpdate({_id: req.user._id}, { token: ''});
+    return res.json({
+      success: true,
+    });    
+  } catch (error) {
+    return res.json({
+      success: false,
+    });
+  }
+});
+/************************************ */
+/************** BRANDS ************** */
+/************************************ */
+
+app.post('/api/product/brand', auth, admin, async (req,res)=>{
+  const brand = new Brand(req.body);
+  try {
+    const doc = await brand.save();
+    res.json({success: true, brand: doc});
+  } catch (e) {
+    res.json({success: false, error: e });
+  }
+  
+});
+
+app.get('/api/product/brands', async (req, res)=>{
+  try {
+
+    const brands = await Brand.find();
+    return res.json({success: true, brands});
+  } catch(e) {
+    console.error(e);
+    return res.status(400).send(e);
+  }
+});
+
+
+/************************************ */
+/************** WOODS *************** */
+/************************************ */
+app.post('/api/product/wood', auth, admin, async(req, res)=>{
+  try {
+    const wood = new Wood(req.body);
+    const doc = await wood.save();
+    res.status(200).json({success: true, wood: doc});
+  } catch(error) {
+    res.status(400).send({success: false, error: error});
+  }
+});
+
+app.get('/api/product/woods', async (req, res)=>{
+  try{
+    const woods = await Wood.find({});
+    res.json({success: true, woods});
+  } catch(error){
+    res.status(400).send({success: false, error: error});
+  }
+});
+
+
+
 app.get('/', (req, res) => {
   res.send('Hey');
 });
