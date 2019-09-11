@@ -19,7 +19,8 @@ app.use(cookieParser());
 // Models 
 const { User } = require('./models/user');
 const { Brand } = require('./models/brand');
-const  { Wood }  = require('./models/wood');
+const { Wood }  = require('./models/wood');
+const { Product } = require('./models/product');
 const { auth } = require('./middleware/auth');
 const { admin } = require('./middleware/admin');
 // USERS
@@ -132,6 +133,44 @@ app.get('/api/product/woods', async (req, res)=>{
   try{
     const woods = await Wood.find({});
     res.json({success: true, woods});
+  } catch(error){
+    res.status(400).send({success: false, error: error});
+  }
+});
+
+
+/************************************ */
+/************** PRODUCTS ************* */
+/************************************ */
+app.post('/api/product/article', auth, admin, async(req,res)=>{
+  try {
+    const product = new Product(req.body);
+    const doc = await product.save();
+    res.status(200).json({success: true, product: doc});
+  } catch(error) {
+    res.status(400).send({success: false, error: error});
+  }
+});
+
+
+app.get('/api/product/articles_by_id', async (req, res)=>{
+  let {items} = req.query;
+
+  let ids = items.split(',');
+    
+  items = ids.map(item=>mongoose.Types.ObjectId(item));
+    
+  try{
+    const products = await Product.find({'_id': {$in: items}}).populate('brand').populate('wood');
+    res.json({products});
+  } catch(error){
+    res.status(400).send({success: false, error: error});
+  }
+});
+app.get('/api/product/articles', async (req, res)=>{
+  try{
+    const products = await Product.find({});
+    res.json({success: true, products});
   } catch(error){
     res.status(400).send({success: false, error: error});
   }
