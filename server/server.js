@@ -34,6 +34,7 @@ app.post('/api/users/register', (req, res) => {
 
 app.get('/api/users/auth', auth, (req, res)=>{
   const { email, name, lastname, role,cart, history } = req.user;
+  console.log(req.user);
   res.status(200).json({
     isAdmin: req.user.role === 0? false: true,
     isAuth: true,

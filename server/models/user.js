@@ -67,7 +67,8 @@ userSchema.statics.findByToken = async function (token){
   if (decode) {
     console.log('Decode', decode);
     return user.findOne({'_id': decode, token });
-  }
+  } 
+  else return null;
 };
 
 const User = mongoose.model('User', userSchema);

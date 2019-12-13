@@ -1,15 +1,18 @@
 const { User } = require('../models/user');
-let auth = async (req,res, next) =>{
+let auth = async (req, res, next) => {
   let token = req.cookies.w_auth;
-  if(!token) {
-    return res.status(401);
+  if (!token) {
+    return res.json({
+      isAuth: false,
+      error: true
+    });
   }
   try {
     const user = await User.findByToken(token);
-    if(!user) {
+    if (!user) {
       return res.json({
         isAuth: false,
-        error: true,
+        error: true
       });
     }
     req.token = token;
@@ -17,10 +20,11 @@ let auth = async (req,res, next) =>{
     next();
   } catch (error) {
     console.error(error);
-    return res.status(401);
-  
+    return res.json({
+      isAuth: false,
+      error: true
+    });
   }
-  
 };
 
-module.exports = {auth};
+module.exports = { auth };
