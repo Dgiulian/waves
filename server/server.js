@@ -167,15 +167,20 @@ app.get('/api/product/articles_by_id', async (req, res)=>{
     res.status(400).send({success: false, error: error});
   }
 });
+
 app.get('/api/product/articles', async (req, res)=>{
+  const {sortBy = '_id', order = 'asc', limit = 100000} = req.query;
   try{
-    const products = await Product.find({});
+    const products = await Product.find()
+      .populate('brand')
+      .populate('wood')
+      .sort([[sortBy, order]])
+      .limit(Number(limit));
     res.json({success: true, products});
   } catch(error){
     res.status(400).send({success: false, error: error});
   }
 });
-
 
 
 app.get('/', (req, res) => {
