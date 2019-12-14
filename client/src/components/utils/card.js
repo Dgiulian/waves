@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import Button from '../Button';
 
 class Card extends Component {
   renderCardImage = images =>
     images.length ? images[1] : '/images/image_not_availble.png';
   render() {
-    const { grid, images, brand, name, price } = this.props;
+    const { grid = '', _id, images, brand, name, price } = this.props;
     return (
       <div className={`card_item_wrapper ${grid}`}>
         <div
@@ -23,6 +24,23 @@ class Card extends Component {
               quibusdam quaerat quia!
             </div>
           ) : null}
+          <div className="actions">
+            <div className="button_wrapp">
+              <Button
+                type="default"
+                altClass="card_link"
+                title="View product"
+                linkTo={`/product_detail/${_id}`}
+                style={{ marginTop: 10 }}
+                />
+            </div>
+            <div className="button_wrapp">
+              <Button
+              type="bag_link"
+              style={{ marginTop: 10 }}
+              runAction={()=>console.log("Added to cart")} />
+            </div>
+          </div>
         </div>
       </div>
     );
