@@ -1,0 +1,24 @@
+import axios from 'axios';
+
+import { PRODUCT_SERVER } from '../../utils/misc';
+import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL } from './types';
+
+export function getProductsBySell() {
+  const request = axios
+    .get(`${PRODUCT_SERVER}/articles?sortBy=sold&order=desc&limit=100`)
+    .then(response => response.data.products);
+  return {
+    type: GET_PRODUCTS_BY_SELL,
+    payload: request
+  };
+}
+
+export function getProductsByArrival() {
+  const request = axios
+    .get(`${PRODUCT_SERVER}/articles?sortBy=createdAt&order=desc&limit=100`)
+    .then(response => response.data.products);
+  return {
+    type: GET_PRODUCTS_BY_ARRIVAL,
+    payload: request
+  };
+}
