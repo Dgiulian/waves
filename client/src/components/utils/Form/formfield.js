@@ -1,4 +1,5 @@
 import React from 'react';
+import { ListItemSecondaryAction } from '@material-ui/core';
 
 const FormField = ({ id, formData, onChange }) => {
   const showError = () => {
@@ -16,6 +17,9 @@ const FormField = ({ id, formData, onChange }) => {
       case 'input': {
         formTemplate = (
           <div className="formBlock">
+            {formData.showLabel ? (
+              <div className="label_inputs">{formData.config.label}</div>
+            ) : null}
             <input
               {...formData.config}
               value={formData.value}
@@ -27,6 +31,48 @@ const FormField = ({ id, formData, onChange }) => {
         );
         break;
       }
+      case 'select': {
+        formTemplate = (
+          <div className="formBlock">
+            {formData.showLabel ? (
+              <div className="label_inputs">{formData.config.label}</div>
+            ) : null}
+            <select
+              value={formData.value}
+              onBlur={event => onChange({ event, id, blur: true })}
+              onChange={event => onChange({ event, id })}
+            >
+              <option value="">Select one</option>
+              {formData.config.options.map((item, id) => (
+                <option key={item.key} value={item.key}>
+                  {item.value}
+                </option>
+              ))}
+              }
+            </select>
+            {showError()}
+          </div>
+        );
+        break;
+      }
+      case 'textarea': {
+        formTemplate = (
+          <div className="formBlock">
+            {formData.showLabel ? (
+              <div className="label_inputs">{formData.config.label}</div>
+            ) : null}
+            <textarea
+              {...formData.config}
+              value={formData.value}
+              onBlur={event => onChange({ event, id, blur: true })}
+              onChange={event => onChange({ event, id })}
+            />
+            {showError()}
+          </div>
+        );
+        break;
+      }
+
       default:
         return formTemplate;
     }

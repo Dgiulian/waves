@@ -133,7 +133,7 @@ textarea {
     border: 1px solid #d1d1d1;
 }
 
-.form_devider {
+.form_divider {
     border-bottom: 3px solid #999592;
     margin: 40px 0px;
 }
@@ -459,8 +459,8 @@ footer .business_nfo .nfo {
 ==============================*/
 
 .card_item_wrapper {
-    flex-grow: 1;
-    width: 25%;
+    flex: 0 1 25%;;
+    
     padding: 0 20px;
     box-sizing: border-box;
     position: relative;

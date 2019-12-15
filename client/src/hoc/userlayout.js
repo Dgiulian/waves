@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 const links = [
   { name: 'My Account', linkTo: '/user/dashboard' },
   {
@@ -11,7 +13,21 @@ const links = [
     linkTo: '/user/cart'
   }
 ];
-const UserLayout = ({ children }) => {
+const admin = [
+  {
+    name: 'Site info',
+    linkTo: '/admin/site_info'
+  },
+  {
+    name: 'Add products',
+    linkTo: '/admin/add_product'
+  },
+  {
+    name: 'Manage categories',
+    linkTo: '/admin/manage_categories'
+  }
+];
+const UserLayout = ({ user, children }) => {
   const generateLinks = links =>
     links.map((item, i) => (
       <Link key={i} to={item.linkTo}>
@@ -24,6 +40,12 @@ const UserLayout = ({ children }) => {
         <div className="user_left_nav">
           <h2>My Account</h2>
           <div className="links">{generateLinks(links)}</div>
+          {user.userData.isAdmin ? (
+            <div>
+              <h2>Admin</h2>
+              <div className="links">{generateLinks(admin)}</div>
+            </div>
+          ) : null}
         </div>
         <div className="user_right">{children}</div>
       </div>
@@ -31,4 +53,6 @@ const UserLayout = ({ children }) => {
   );
 };
 
-export default UserLayout;
+const mapStateToProps = state => ({ user: state.user });
+
+export default connect(mapStateToProps)(UserLayout);
