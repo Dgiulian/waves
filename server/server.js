@@ -164,7 +164,7 @@ app.post('/api/product/shop', async (req, res) => {
     skip = 0,
     filters = {}
   } = req.body;
-  let findArgs = {};
+  let findArgs = { publish: true };
   for (let key in filters) {
     if (filters[key].length > 0) {
       if (key === 'price') {
