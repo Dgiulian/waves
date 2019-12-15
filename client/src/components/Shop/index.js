@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PageTop from '../utils/page_top';
-import { getBrands, getWoods } from '../../store/actions/product_actions';
+import {
+  getBrands,
+  getWoods,
+  getProductsToShop
+} from '../../store/actions/product_actions';
 import { frets, prices } from '../../utils/fixed_categories';
 import CollapseCheckBox from '../utils/CollapseCheckBox';
 import CollapseRadio from '../utils/CollapseRadio';
+import LoadMoreCards from './load_more_cards';
 
 class Shop extends Component {
   state = {
@@ -21,6 +26,8 @@ class Shop extends Component {
   componentDidMount() {
     this.props.dispatch(getBrands());
     this.props.dispatch(getWoods());
+    const { skip, limit, filters } = this.state;
+    this.props.dispatch(getProductsToShop({ skip, limit, filters }));
   }
   handlePrice = price => {
     const data = prices;
@@ -40,9 +47,27 @@ class Shop extends Component {
       let priceValue = this.handlePrice(filters);
       newFilters[category] = priceValue;
     }
+    this.showFilteredResult(newFilters);
     this.setState({ filters: newFilters });
   };
-
+  showFilteredResult = filters => {
+    this.props
+      .dispatch(
+        getProductsToShop({ skip: 0, limit: this.state.limit, filters })
+      )
+      .then(() => this.setState({ skip: 0 }));
+  };
+  loadMoreCards = () => {
+    const skip = this.state.skip + this.state.limit;
+    this.props
+      .dispatch(
+        getProductsToShop(
+          { skip, limit: this.state.limit, filters: this.state.filters },
+          this.props.products.toShop
+        )
+      )
+      .then(() => this.setState({ skip }));
+  };
   render() {
     const products = this.props.products;
 
@@ -78,7 +103,20 @@ class Shop extends Component {
                 handleFilters={filters => this.handleFilters(filters, 'price')}
               />
             </div>
-            <div className="right">Right</div>
+            <div className="right">
+              <div className="shop_options">
+                <div className="shop_grids clear">Grids</div>
+                <div>
+                  <LoadMoreCards
+                    grid={this.state.grid}
+                    limit={this.state.limit}
+                    size={products.toShopSize}
+                    products={products.toShop}
+                    loadMore={() => this.loadMoreCards()}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

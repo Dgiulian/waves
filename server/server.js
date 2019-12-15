@@ -156,6 +156,35 @@ app.get('/api/product/woods', async (req, res) => {
 /************************************ */
 /************** PRODUCTS ************* */
 /************************************ */
+app.post('/api/product/shop', async (req, res) => {
+  let {
+    order = 'desc',
+    sortBy = '_id',
+    limit = 100,
+    skip = 0,
+    filters = {}
+  } = req.body;
+  let findArgs = {};
+  for (let key in filters) {
+    if (filters[key].length > 0) {
+      if (key === 'price') {
+        findArgs[key] = {
+          $gte: filters[key][0],
+          $lte: filters[key][1]
+        };
+      } else {
+        findArgs[key] = filters[key];
+      }
+    }
+  }
+  const articles = await Product.find(findArgs)
+    .populate('brands')
+    .populate('woods')
+    .sort([[sortBy, order]])
+    .skip(skip)
+    .limit(limit);
+  res.status(200).json({ size: articles.length, articles });
+});
 app.post('/api/product/article', auth, admin, async (req, res) => {
   try {
     const product = new Product(req.body);
