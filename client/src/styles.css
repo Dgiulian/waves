@@ -521,7 +521,7 @@ footer .business_nfo .nfo {
 }
 
 .card_item_wrapper.grid_bars .image {
-    width: 420px;
+    flex: 0 0 220px;
     height: 211px;
     border: none;
 

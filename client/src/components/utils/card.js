@@ -20,8 +20,7 @@ class Card extends Component {
           </div>
           {grid ? (
             <div className="description">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis
-              quibusdam quaerat quia!
+              <p>{this.props.description}</p>
             </div>
           ) : null}
           <div className="actions">
@@ -32,13 +31,14 @@ class Card extends Component {
                 title="View product"
                 linkTo={`/product_detail/${_id}`}
                 style={{ marginTop: 10 }}
-                />
+              />
             </div>
             <div className="button_wrapp">
               <Button
-              type="bag_link"
-              style={{ marginTop: 10 }}
-              runAction={()=>console.log("Added to cart")} />
+                type="bag_link"
+                style={{ marginTop: 10 }}
+                runAction={() => console.log('Added to cart')}
+              />
             </div>
           </div>
         </div>
