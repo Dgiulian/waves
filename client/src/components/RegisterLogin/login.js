@@ -49,7 +49,6 @@ class login extends Component {
     let formIsValid = isFormValid(this.state.formData);
     if (formIsValid) {
       this.props.dispatch(loginUser(dataToSubmit)).then(response => {
-        console.log(response.payload);
         if (response.payload.success) {
           this.props.history.push('/user/dashboard');
         } else {

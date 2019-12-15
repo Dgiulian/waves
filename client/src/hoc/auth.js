@@ -8,13 +8,11 @@ export default function(ComposedComponent, reload, adminRoute = null) {
     componentDidMount() {
       this.props.dispatch(auth()).then(response => {
         let user = this.props.user.userData;
-        console.log(user)
         if (!user.isAuth) {
           if (reload) {
             this.props.history.push('/register_login');
           }
         } else {
-          console.log("Poop")
           if (adminRoute && user.isAdmin) {
             this.props.history.push('/user/dashboard');
           } else {
