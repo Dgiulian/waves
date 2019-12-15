@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserLayout from '../../../hoc/userlayout';
 import FormField from '../../utils/Form/formfield';
+import FileUpload from '../../utils/Form/file_upload';
+
 import {
   getBrands,
   getWoods,
@@ -187,6 +189,16 @@ class AddProduct extends Component {
         touched: true,
         validationMessage: '',
         showLabel: true
+      },
+      images: {
+        value: [],
+        validation: {
+          required: false,
+        },
+        valid: true,
+        touched: false,
+        validationMessage: '',
+        showLabel: false
       }
     }
   };
@@ -250,6 +262,10 @@ class AddProduct extends Component {
         <div>
           <h1>Add Product</h1>
           <form action="POST" onSubmit={this.submitForm}>
+            <FileUpload
+            imagesHandler= {()=>this.imagesHandler()}
+            reset={this.state.formSuccess}
+            />
             <FormField
               id={'name'}
               formData={this.state.formData['name']}
