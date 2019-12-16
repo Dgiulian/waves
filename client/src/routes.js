@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import Auth from './hoc/auth';
 import Shop from './components/Shop';
 import AddProduct from './components/Dashboard/Admin/add_product';
+import ManageCategories from './components/Dashboard/Admin/manage_categories';
 
 const Routes = () => {
   return (
@@ -15,6 +16,7 @@ const Routes = () => {
       <Switch>
         <Route path="/user/dashboard" component={Auth(Dashboard, true)} />
         <Route path="/admin/add_product" component={Auth(AddProduct, true)} />
+        <Route path="/admin/manage_categories" component={Auth(ManageCategories, true)} />
         <Route path="/register" exact component={Auth(Register, false)} />
         <Route
           path="/register_login"
