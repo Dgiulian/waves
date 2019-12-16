@@ -9,7 +9,8 @@ import {
   GET_PRODUCTS_TO_SHOP,
   ADD_PRODUCT,
   CLEAR_PRODUCT,
-  ADD_BRAND
+  ADD_BRAND,
+  ADD_WOOD
 } from './types';
 
 export function getProductsBySell() {
@@ -94,6 +95,17 @@ export function addBrand(data, existingBrands = []) {
   });
   return {
     type: ADD_BRAND,
+    payload: request
+  };
+}
+
+export function addWood(data, existingWoods = []) {
+  const request = axios.post(`${PRODUCT_SERVER}/wood`, data).then(response => {
+    const woods = [...existingWoods, response.data.wood];
+    return { success: true, woods };
+  });
+  return {
+    type: ADD_WOOD,
     payload: request
   };
 }

@@ -16,3 +16,4 @@ export const ADD_PRODUCT = 'add_product';
 export const CLEAR_PRODUCT = 'CLEAR_PRODUCT';
 
 export const ADD_BRAND = 'ADD_BRAND';
+export const ADD_WOOD = 'ADD_WOOD';
