@@ -65,7 +65,6 @@ userSchema.statics.findByToken = async function (token){
   let user = this;
   const decode = await jwt.verify(token, process.env.SECRET_KEY);
   if (decode) {
-    console.log('Decode', decode);
     return user.findOne({'_id': decode, token });
   } 
   else return null;

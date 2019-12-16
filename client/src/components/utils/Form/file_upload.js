@@ -10,6 +10,12 @@ class FileUpload extends Component {
     uploadedFiles: [],
     uploading: false
   };
+  static getDerivedStateFromProps(props, state) {
+    if (props.reset) {
+      return (state = { uploadedFiles: [] });
+    }
+    return null;
+  }
   onDrop = files => {
     this.setState({ uploading: true });
     let formData = new FormData();
@@ -27,7 +33,24 @@ class FileUpload extends Component {
       );
     });
   };
-  showUploadedImages = () => {};
+  onRemove = id => {
+
+  };
+  showUploadedImages = () =>
+    this.state.uploadedFiles.map((item, i) => (
+      <div
+        className="dropzone_box"
+        key={item.public_id}
+        onClick={() => this.onRemove(item.public_id)}
+      >
+        <div
+          className="wrap"
+          style={{
+            background: `url(${item.url}) no-repeat`
+          }}
+        ></div>
+      </div>
+    ));
   render() {
     return (
       <div>
@@ -40,7 +63,6 @@ class FileUpload extends Component {
             >
               <div className="wrap">
                 <FontAwesomeIcon icon={faPlusCircle} />
-                
               </div>
             </Dropzone>
             {this.showUploadedImages()}

@@ -3,7 +3,7 @@ import Button from '../Button';
 
 class Card extends Component {
   renderCardImage = images =>
-    images.length ? images[1] : '/images/image_not_availble.png';
+    images.length ? images[0].url : '/images/image_not_availble.png';
   render() {
     const { grid = '', _id, images, brand, name, price } = this.props;
     return (

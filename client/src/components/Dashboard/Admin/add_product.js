@@ -193,7 +193,7 @@ class AddProduct extends Component {
       images: {
         value: [],
         validation: {
-          required: false,
+          required: false
         },
         valid: true,
         touched: false,
@@ -256,6 +256,13 @@ class AddProduct extends Component {
       this.setState({ formError: true });
     }
   };
+  imagesHandler = images => {
+    const newFormData = {
+      ...this.state.formData
+    };
+    newFormData['images'].value = images;    
+    this.setState({ formData: newFormData });
+  };
   render() {
     return (
       <UserLayout>
@@ -263,8 +270,8 @@ class AddProduct extends Component {
           <h1>Add Product</h1>
           <form action="POST" onSubmit={this.submitForm}>
             <FileUpload
-            imagesHandler= {()=>this.imagesHandler()}
-            reset={this.state.formSuccess}
+              imagesHandler={ this.imagesHandler}
+              reset={this.state.formSuccess}
             />
             <FormField
               id={'name'}
