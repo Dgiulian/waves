@@ -251,6 +251,13 @@ app.post('/api/users/uploadimage', auth, admin, formidable(), (req, res) => {
   );
 });
 
+app.post('/api/users/removeImage', auth, admin, (req, res) => {
+  const { id } = req.body;
+  cloudinary.uploader.destroy(id, result => {
+    console.log(result);
+    return res.json({ success: true });
+  });
+});
 app.get('/', (req, res) => {
   res.send('Hey');
 });

@@ -34,7 +34,14 @@ class FileUpload extends Component {
     });
   };
   onRemove = id => {
-
+    axios.post(`/api/users/removeImage`, { id }).then(response => {
+      let images = this.state.uploadedFiles.filter(
+        item => item.public_id !== id
+      );
+      this.setState({ uploadedFiles: images }, () =>
+        this.props.imagesHandler(images)
+      );
+    });
   };
   showUploadedImages = () =>
     this.state.uploadedFiles.map((item, i) => (
