@@ -8,7 +8,8 @@ import {
   GET_WOODS,
   GET_PRODUCTS_TO_SHOP,
   ADD_PRODUCT,
-  CLEAR_PRODUCT
+  CLEAR_PRODUCT,
+  ADD_BRAND
 } from './types';
 
 export function getProductsBySell() {
@@ -71,17 +72,28 @@ export function getProductsToShop(
 }
 
 export function addProduct(data) {
-  const request = axios.post(`${PRODUCT_SERVER}/article`, data)
-    .then(response=>response.data);
+  const request = axios
+    .post(`${PRODUCT_SERVER}/article`, data)
+    .then(response => response.data);
   return {
     type: ADD_PRODUCT,
     payload: request
   };
 }
 
-
-export function clearProduct(){
+export function clearProduct() {
   return {
-    type: CLEAR_PRODUCT,
+    type: CLEAR_PRODUCT
+  };
+}
+
+export function addBrand(data, existingBrands = []) {
+  const request = axios.post(`${PRODUCT_SERVER}/brand`, data).then(response => {
+    const brands = [...existingBrands, response.data.brand];
+    return { success: true, brands };
+  });
+  return {
+    type: ADD_BRAND,
+    payload: request
   };
 }
