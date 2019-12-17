@@ -21,12 +21,24 @@ const Button = ({ type, title, style, linkTo, altClass, runAction }) => {
       }
       case 'bag_link': {
         template = (
-          <div className="bag_link" style={{ ...style }} onClick={() => runAction()}>
+          <div
+            className="bag_link"
+            style={{ ...style }}
+            onClick={() => runAction()}
+          >
             <FontAwesomeIcon icon={faShoppingBag} />
           </div>
         );
         break;
       }
+      case 'add_to_cart_link':
+        template = (
+          <div className="add_to_cart_link" onClick={() => runAction()}>
+            {title}
+          </div>
+        );
+        break;
+
       default:
         template = null;
     }

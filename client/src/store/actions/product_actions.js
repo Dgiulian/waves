@@ -10,7 +10,9 @@ import {
   ADD_PRODUCT,
   CLEAR_PRODUCT,
   ADD_BRAND,
-  ADD_WOOD
+  ADD_WOOD,
+  GET_PRODUCT_DETAIL,
+  CLEAR_PRODUCT_DETAIL
 } from './types';
 
 export function getProductsBySell() {
@@ -108,4 +110,18 @@ export function addWood(data, existingWoods = []) {
     type: ADD_WOOD,
     payload: request
   };
+}
+
+export function getProductDetail(id) {
+  const request = axios
+    .get(`${PRODUCT_SERVER}/articles_by_id?id=${id}&type=single`)
+    .then(response => response.data.products[0]);
+  return {
+    type: GET_PRODUCT_DETAIL,
+    payload: request
+  };
+}
+
+export function clearProductDetail() {
+  return { type: CLEAR_PRODUCT_DETAIL };
 }
