@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-
+import ImageLightbox from '../utils/image_lightbox';
 
 class ProdImg extends Component {
   state = {
     lightbox: false,
     imagePos: 0,
-    lightbodImages: []
+    lightboxImages: []
   };
   componentDidMount() {
     if (this.props.detail.images) {
-      let lightbodImages = [];
-      this.props.detail.images.map(item => lightbodImages.push(item.url));
-      this.setState({ lightbodImages });
+      let lightboxImages = [];
+      this.props.detail.images.map(item => lightboxImages.push(item.url));
+      this.setState({ lightboxImages });
     }
   }
   renderCardImage = images => {
@@ -20,17 +20,17 @@ class ProdImg extends Component {
     } else return `/images/image_not_availble.png`;
   };
   handleLightBox = pos => {
-    if (this.state.lightbodImages.length > 0) {
-      this.state({ lightbox: true, imagePos: pos });
+    if (this.state.lightboxImages.length > 0) {
+      this.setState({ lightbox: true, imagePos: pos });
     }
   };
   handleLightBoxClose = () => {
-    this.state({ lightbox: false });
+    this.setState({ lightbox: false });
   };
 
   showThumbs = () =>
-    this.state.lightbodImages.map((item, i) =>
-      i > 0 ? (
+    this.state.lightboxImages.map((item, i) =>
+      i > -1 ? (
         <div
           key={i}
           onClick={() => this.handleLightBox(i)}
@@ -58,7 +58,17 @@ class ProdImg extends Component {
           ></div>
         </div>
         <div className="main_thumbs">{this.showThumbs()}</div>
-
+        {this.state.lightbox && (
+          <ImageLightbox
+            id={detail.id}
+            images={this.state.lightboxImages}
+            open={this.state.lightbox}
+            pos={this.state.imagePos}
+            onClose={() => {
+              this.handleLightBoxClose();
+            }}
+          />
+        )}
       </div>
     );
   }
