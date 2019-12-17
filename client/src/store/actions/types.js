@@ -4,6 +4,7 @@ export const AUTH_USER = 'auth_user';
 export const LOGOUT_USER = 'logout_user';
 export const ADD_TO_CART = 'ADD_TO_CART';
 export const GET_CART_ITEMS = 'GET_CART_ITEMS';
+export const REMOVE_CART_ITEM = 'REMOVE_CART_ITEM';
 
 export const GET_PRODUCTS_BY_SELL = 'get_products_by_sell';
 export const GET_PRODUCTS_BY_ARRIVAL = 'get_products_by_arrival';

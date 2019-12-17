@@ -308,7 +308,33 @@ app.post('/api/users/addtocart', auth, async (req, res) => {
     return res.json({ success: false, error: 'User not found' });
   }
 });
+app.post('/api/users/removeFromCart', auth, async (req, res) => {
+  const { id } = req.body;
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      {
+        $pull: { cart: { id: mongoose.Types.ObjectId(id) } }
+      },
+      {
+        new: true
+      }
+    ).exec();
 
+    if (updatedUser) {
+      let cart = updatedUser.cart;
+      let array = cart.map(item => mongoose.Types.ObjectId(item.id));
+      const cartDetail = await Product.find({ _id: { $in: array } })
+        .populate('wood')
+        .populate('brand');
+      return res.status(200).json({ success: true, cartDetail, cart });
+    } else {
+      return res.json({ success: false, error: 'Could not update the cart ' });
+    }
+  } catch (e) {
+    return res.json({ success: false, error: 'Could not update the cart ' });
+  }
+});
 app.get('/', (req, res) => {
   res.send('Hey');
 });

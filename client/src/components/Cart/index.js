@@ -4,7 +4,7 @@ import UserLayout from '../../hoc/userlayout';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faFrown from '@fortawesome/fontawesome-free-solid/faFrown';
 import faSmile from '@fortawesome/fontawesome-free-solid/faSmile';
-import { getCartItems } from '../../store/actions/user_actions';
+import { getCartItems, removeCartItem } from '../../store/actions/user_actions';
 import UserProductBlock from '../utils/user_product_block';
 
 class UserCart extends Component {
@@ -43,6 +43,15 @@ class UserCart extends Component {
       <div>Your order is complete </div>
     </div>
   );
+  removeFromCart = id => {
+    this.props.dispatch(removeCartItem(id)).then(() => {
+      if (this.props.user.cartDetail.length == 0) {
+        this.setState({ showTotal: false });
+      } else {
+        this.calculateTotal(this.props.user.cartDetail);
+      }
+    });
+  };
   render() {
     return (
       <UserLayout>
