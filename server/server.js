@@ -204,7 +204,7 @@ app.post('/api/product/article', auth, admin, async (req, res) => {
 });
 
 app.get('/api/product/articles_by_id', async (req, res) => {
-  let { items } = req.query;
+  let { id: items } = req.query;
 
   let ids = items.split(',');
 
