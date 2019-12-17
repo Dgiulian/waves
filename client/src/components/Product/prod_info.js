@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Button from '../Button';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faTruck from '@fortawesome/fontawesome-free-solid/faTruck';
 import faCheck from '@fortawesome/fontawesome-free-solid/faCheck';
 import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
+import { addToCart } from '../../store/actions/user_actions';
 
 const ProdInfo = props => {
   const { detail } = props;
@@ -51,7 +53,7 @@ const ProdInfo = props => {
           type="add_to_cart_link"
           title="Add to cart"
           runAction={() => {
-            console.log('add to cart', detail._id);
+            props.dispatch(addToCart(detail._id));
           }}
         />
       </div>
@@ -81,4 +83,4 @@ const ProdInfo = props => {
   ) : null;
 };
 
-export default ProdInfo;
+export default connect()(ProdInfo);

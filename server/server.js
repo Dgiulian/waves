@@ -258,6 +258,57 @@ app.post('/api/users/removeImage', auth, admin, (req, res) => {
     return res.json({ success: true });
   });
 });
+
+app.post('/api/users/addtocart', auth, async (req, res) => {
+  let duplicate = false;
+  const { productId } = req.query;
+  const user = await User.findOne({ _id: req.user._id });
+  if (user) {
+    user.cart.forEach(item => {
+      if (item.id == productId) {
+        duplicate = true;
+      }
+    });
+    if (duplicate) {
+      const updatedUser = await User.findOneAndUpdate(
+        {
+          _id: req.user._id,
+          'cart.id': mongoose.Types.ObjectId(productId)
+        },
+        { $inc: { 'cart.$.quantity': 1 } },
+        { new: true }
+      );
+      if (updatedUser) {
+        return res.status(200).json({ success: true, cart: updatedUser.cart });
+      } else {
+        return res.json({ success: false, error: 'User not found' });
+      }
+      //
+    } else {
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $push: {
+            cart: {
+              id: mongoose.Types.ObjectId(productId),
+              quantity: 1,
+              date: Date.now()
+            }
+          }
+        },
+        { new: true }
+      );
+      if (updatedUser) {
+        return res.status(200).json({ success: true, cart: updatedUser.cart });
+      } else {
+        return res.json({ success: false, error: 'User not found' });
+      }
+    }
+  } else {
+    return res.json({ success: false, error: 'User not found' });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('Hey');
 });

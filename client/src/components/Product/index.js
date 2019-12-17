@@ -7,6 +7,7 @@ import {
 import PageTop from '../utils/page_top';
 import ProdInfo from './prod_info';
 import ProdImg from './prod_img';
+import { addToCart } from '../../store/actions/user_actions';
 
 class ProductPage extends Component {
   componentDidMount() {
@@ -20,7 +21,9 @@ class ProductPage extends Component {
   componentWillUnmount() {
     this.props.dispatch(clearProductDetail());
   }
-  addToCartHandler = id => {};
+  addToCartHandler = id => {
+    this.props.dispatch(addToCart(id));
+  };
   render() {
     return (
       <div>

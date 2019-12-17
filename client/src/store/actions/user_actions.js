@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { USER_SERVER } from '../../utils/misc';
-import { AUTH_USER, LOGIN_USER, LOGOUT_USER, REGISTER_USER } from './types';
+import { AUTH_USER, LOGIN_USER, LOGOUT_USER, REGISTER_USER, ADD_TO_CART } from './types';
  
 export function loginUser(dataToSubmit) {
   const request = axios
@@ -37,6 +37,15 @@ export function logoutUser() {
   .then(response=>response.data)
   return {
     type: LOGOUT_USER,
+    payload: request
+  }
+}
+
+export function addToCart (id){
+  const request = axios.post(`${USER_SERVER}/addtocart?productId=${id}`)
+  .then(response=>response.data);
+  return {
+    type: ADD_TO_CART,
     payload: request
   }
 }
