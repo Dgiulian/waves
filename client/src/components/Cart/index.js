@@ -9,6 +9,13 @@ import UserProductBlock from '../utils/user_product_block';
 
 class UserCart extends Component {
   state = { loading: false, total: 0, showSuccess: false, showTotal: false };
+  calculateTotal = cartDetail => {
+    let total = cartDetail.reduce(
+      (acc, item) => acc + parseInt(item.price, 10) * item.quantity,
+      0
+    );
+    this.setState({ total, showTotal: true });
+  };
   componentDidMount() {
     let cartItems = [];
     let user = this.props.user;
@@ -16,10 +23,26 @@ class UserCart extends Component {
       const cart = user.userData.cart;
       if (cart.length) {
         cart.forEach(item => cartItems.push(item.id));
-        this.props.dispatch(getCartItems(cartItems, cart)).then(() => {});
+        this.props.dispatch(getCartItems(cartItems, cart)).then(() => {
+          if (this.props.user.cartDetail.length) {
+            this.calculateTotal(this.props.user.cartDetail);
+          }
+        });
       }
     }
   }
+  showNoItemMessage = () => (
+    <div className="cart_no_items">
+      <FontAwesomeIcon icon={faFrown} />
+      <div>You have items</div>
+    </div>
+  );
+  showSuccessMessage = () => (
+    <div className="cart_no_items">
+      <FontAwesomeIcon icon={faSmile} />
+      <div>Your order is complete </div>
+    </div>
+  );
   render() {
     return (
       <UserLayout>
@@ -31,7 +54,19 @@ class UserCart extends Component {
             type="cart"
             removeItem={id => this.removeFromCart(id)}
           />
+          {this.state.showTotal ? (
+            <div className="user_cart_sum">
+              <div>Total amount: $ {this.state.total}</div>
+            </div>
+          ) : this.state.showSuccess ? (
+            this.showSuccessMessage()
+          ) : (
+            this.showNoItemMessage()
+          )}
         </div>
+        {this.state.showTotal ? (
+          <div className="paypal_button_container"> Paypal</div>
+        ) : null}
       </UserLayout>
     );
   }
