@@ -1,7 +1,14 @@
 import axios from 'axios';
-import { USER_SERVER } from '../../utils/misc';
-import { AUTH_USER, LOGIN_USER, LOGOUT_USER, REGISTER_USER, ADD_TO_CART } from './types';
- 
+import { USER_SERVER, PRODUCT_SERVER } from '../../utils/misc';
+import {
+  AUTH_USER,
+  LOGIN_USER,
+  LOGOUT_USER,
+  REGISTER_USER,
+  ADD_TO_CART,
+  GET_CART_ITEMS
+} from './types';
+
 export function loginUser(dataToSubmit) {
   const request = axios
     .post(`${USER_SERVER}/login`, dataToSubmit)
@@ -31,21 +38,39 @@ export function auth() {
   };
 }
 
-
 export function logoutUser() {
-  const request = axios.get(`${USER_SERVER}/logout`)
-  .then(response=>response.data)
+  const request = axios
+    .get(`${USER_SERVER}/logout`)
+    .then(response => response.data);
   return {
     type: LOGOUT_USER,
     payload: request
-  }
+  };
 }
 
-export function addToCart (id){
-  const request = axios.post(`${USER_SERVER}/addtocart?productId=${id}`)
-  .then(response=>response.data);
+export function addToCart(id) {
+  const request = axios
+    .post(`${USER_SERVER}/addtocart?productId=${id}`)
+    .then(response => response.data);
   return {
     type: ADD_TO_CART,
     payload: request
-  }
+  };
+}
+
+export function getCartItems(cartItems, userCart) {
+  const request = axios
+    .get(`${PRODUCT_SERVER}/articles_by_id?id=${cartItems}&type=array`)
+    .then(response => {
+      const products = response.data.products;
+      products.forEach(product => {
+        const cartItem = userCart.find(item => item.id === product._id);
+        if (cartItem) {
+          product.quantity = cartItem.quantity;
+        }
+      });
+      return products;
+    })
+    .catch(error => null);
+  return { type: GET_CART_ITEMS, payload: request };
 }
