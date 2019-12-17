@@ -115,7 +115,10 @@ export function addWood(data, existingWoods = []) {
 export function getProductDetail(id) {
   const request = axios
     .get(`${PRODUCT_SERVER}/articles_by_id?id=${id}&type=single`)
-    .then(response => response.data.products[0]);
+    .then(response => {
+      return response.data.products[0];
+    })
+    .catch(error => null);
   return {
     type: GET_PRODUCT_DETAIL,
     payload: request

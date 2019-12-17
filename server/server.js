@@ -208,15 +208,15 @@ app.get('/api/product/articles_by_id', async (req, res) => {
 
   let ids = items.split(',');
 
-  items = ids.map(item => mongoose.Types.ObjectId(item));
-
   try {
+    items = ids.map(item => mongoose.Types.ObjectId(item));
+
     const products = await Product.find({ _id: { $in: items } })
       .populate('brand')
       .populate('wood');
     res.json({ products });
   } catch (error) {
-    res.status(400).send({ success: false, error: error });
+    res.status(200).send({ success: false, products: [] });
   }
 });
 

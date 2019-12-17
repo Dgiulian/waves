@@ -8,13 +8,14 @@ import PageTop from '../utils/page_top';
 import ProdInfo from './prod_info';
 import ProdImg from './prod_img';
 
-
 class ProductPage extends Component {
   componentDidMount() {
     const id = this.props.match.params.id;
-    this.props
-      .dispatch(getProductDetail(id))
-      .then(response => console.log(response));
+    this.props.dispatch(getProductDetail(id)).then(response => {
+      if (!this.props.products.productDetail) {
+        this.props.history.push('/');
+      }
+    });
   }
   componentWillUnmount() {
     this.props.dispatch(clearProductDetail());
@@ -28,7 +29,7 @@ class ProductPage extends Component {
           {this.props.products.productDetail ? (
             <div className="product_detail_wrapper">
               <div className="left">
-                <div style={{width: '500px'}}>
+                <div style={{ width: '500px' }}>
                   <ProdImg detail={this.props.products.productDetail} />
                 </div>
               </div>
@@ -42,11 +43,8 @@ class ProductPage extends Component {
           ) : (
             'Loading'
           )}
-      
         </div>
-      
       </div>
-
     );
   }
 }
