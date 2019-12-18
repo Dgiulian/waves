@@ -77,3 +77,14 @@ export function resetFields(formData, formName) {
   }
   return newFormData;
 }
+
+export function populateFields(formData, fields) {
+  console.log(fields)
+  for (let key in formData) {
+    formData[key].value = fields[key];
+    formData[key].valid = true;
+    formData[key].touched = true;
+    formData[key].validationMessage = '';
+  }
+  return formData;
+}

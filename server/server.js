@@ -116,6 +116,20 @@ app.get('/api/users/logout', auth, async (req, res) => {
     });
   }
 });
+
+app.post('/api/users/update_profile', auth, async (req, res) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    { _id: req.user._id },
+    { $set: req.body },
+    { new: true }
+  );
+  if (!updatedUser) {
+    return res.json({ success: false });
+  } else {
+    res.json({ success: true });
+  }
+});
+
 /************************************ */
 /************** BRANDS ************** */
 /************************************ */
@@ -385,7 +399,7 @@ app.post('/api/users/succsssBuy', auth, async (req, res) => {
       { new: false }
     );
   }
-  res.json({ success: true, cart: user.cart, cartDetail: []  });
+  res.json({ success: true, cart: user.cart, cartDetail: [] });
 });
 
 app.get('/', (req, res) => {

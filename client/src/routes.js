@@ -11,6 +11,7 @@ import AddProduct from './components/Dashboard/Admin/add_product';
 import ManageCategories from './components/Dashboard/Admin/manage_categories';
 import ProductPage from './components/Product';
 import UserCart from './components/Cart';
+import UpdateProfile from './components/Dashboard/update_profile';
 
 const Routes = () => {
   return (
@@ -19,7 +20,11 @@ const Routes = () => {
         <Route path="/user/dashboard" component={Auth(Dashboard, true)} />
         <Route path="/user/cart" component={Auth(UserCart, true)} />
         <Route path="/admin/add_product" component={Auth(AddProduct, true)} />
-        <Route path="/admin/manage_categories" component={Auth(ManageCategories, true)} />
+        <Route
+          path="/admin/manage_categories"
+          component={Auth(ManageCategories, true)}
+        />
+        <Route path="/user/profile" component={Auth(UpdateProfile, true)} />
         <Route path="/register" exact component={Auth(Register, false)} />
         <Route path="/product/:id" exact component={Auth(ProductPage, null)} />
         <Route

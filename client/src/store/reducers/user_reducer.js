@@ -6,7 +6,9 @@ import {
   ADD_TO_CART,
   GET_CART_ITEMS,
   REMOVE_CART_ITEM,
-  ON_SUCCESS_BUY
+  ON_SUCCESS_BUY,
+  UPDATE_PROFILE,
+  CLEAR_UPDATE_PROFILE
 } from '../actions/types';
 
 export default function(state = {}, action) {
@@ -38,6 +40,11 @@ export default function(state = {}, action) {
         userData: { ...state.userData, cart: action.payload.cart },
         cartDetail: action.payload.cartDetail
       };
+    case UPDATE_PROFILE:
+      return { ...state, updateProfile: action.payload };
+    case CLEAR_UPDATE_PROFILE:
+      return { ...state, updateProfile: action.payload };
+
     default:
       return state;
   }

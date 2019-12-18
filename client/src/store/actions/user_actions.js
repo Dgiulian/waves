@@ -5,6 +5,8 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   REGISTER_USER,
+  UPDATE_PROFILE,
+  CLEAR_UPDATE_PROFILE,
   ADD_TO_CART,
   GET_CART_ITEMS,
   REMOVE_CART_ITEM,
@@ -99,4 +101,15 @@ export function onSuccessBuy(data) {
     .post(`${USER_SERVER}/successBuy`, data)
     .then(response => response.data);
   return { type: ON_SUCCESS_BUY, payload: request };
+}
+
+export function updateProfile(data) {
+  const request = axios
+    .post(`${USER_SERVER}/update_profile`, data)
+    .then(response => response.data);
+  return { type: UPDATE_PROFILE, payload: request };
+}
+
+export function clearUpdateProfile() {
+  return { type: CLEAR_UPDATE_PROFILE, payload: '' };
 }
