@@ -320,7 +320,6 @@ app.post('/api/users/uploadimage', auth, admin, formidable(), (req, res) => {
   cloudinary.uploader.upload(
     req.files.file.path,
     result => {
-      console.log(result);
       res.status(200).json({
         public_id: result.public_id,
         url: result.url
@@ -336,7 +335,6 @@ app.post('/api/users/uploadimage', auth, admin, formidable(), (req, res) => {
 app.post('/api/users/removeImage', auth, admin, (req, res) => {
   const { id } = req.body;
   cloudinary.uploader.destroy(id, result => {
-    console.log(result);
     return res.json({ success: true });
   });
 });
