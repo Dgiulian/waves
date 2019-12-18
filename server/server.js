@@ -35,12 +35,21 @@ const { Payment } = require('./models/payment');
 const { Site } = require('./models/site');
 const { auth } = require('./middleware/auth');
 const { admin } = require('./middleware/admin');
+
+// UTILS
+const { sendEmail } = require('./utils/mail');
+
 // USERS
 app.post('/api/users/register', (req, res) => {
   const user = new User(req.body);
   user
     .save()
-    .then(doc => res.json({ success: true, userdata: doc }))
+    .then(doc => {
+      console.log(doc);
+      sendEmail(doc.email, doc.name, null, 'welcome');
+      return Promise.resolve(doc);
+    })
+    .then((doc) => res.json({ success: true, userdata: doc }))
     .catch(err => res.json({ success: false, err }));
 });
 
