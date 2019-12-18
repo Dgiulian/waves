@@ -15,6 +15,13 @@ class AddFile extends Component {
     uploading: false,
     files: []
   };
+  componentDidMount() {
+    axios.get('/api/user/admin_files').then(response => {
+      if (response.data.success) {
+        this.setState({ files: response.data.files });
+      }
+    });
+  }
   onDrop = files => {
     this.setState({ uploading: true });
     let formData = new FormData();
@@ -35,7 +42,20 @@ class AddFile extends Component {
       }
     });
   };
+  showFileList = () =>
+    this.state.files ? (
+      <ul>
+        {this.state.files.map((item, i) => (
+          <li key={i}>
+            {' '}
+            <Link to={`/api/users/download/${item}`} target="_blank">{item}</Link>
+          </li>
+        ))}
+      </ul>
+    ) : null;
+
   render() {
+    console.log(this.state.files);
     return (
       <UserLayout>
         <h1>Upload file</h1>
@@ -67,6 +87,7 @@ class AddFile extends Component {
           </div>
           <div>
             <hr />
+            {this.showFileList()}
           </div>
         </div>
       </UserLayout>

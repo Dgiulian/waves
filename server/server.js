@@ -1,5 +1,6 @@
 require('dotenv').config();
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -459,6 +460,22 @@ app.post('/api/users/uploadfile', auth, admin, (req, res) => {
   });
 });
 
+app.get('/api/user/admin_files', auth, admin, async (req, res) => {
+  const dir = path.resolve(__dirname, '../uploads');
+  fs.readdir(dir, (err, items) => {
+    if (err) {
+      return res.status(500).json({ success: false, files: [] });
+    } else {
+      const files = items.filter(name => !name.startsWith('.'));
+      return res.status(200).json({ success: true, files });
+    }
+  });
+});
+app.get('/api/users/download/:id', auth, admin, (req, res) => {
+  const { id } = req.params;
+  const file = path.resolve(__dirname, '../uploads', id);
+  res.download(file);
+});
 app.get('/', (req, res) => {
   res.send('Hey');
 });
