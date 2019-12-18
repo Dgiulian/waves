@@ -8,9 +8,10 @@ const formidable = require('express-formidable');
 const cloudinary = require('cloudinary');
 const multer = require('multer');
 const mongoose = require('mongoose');
+const moment = require('moment');
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(process.env.DATABASE)
+  .connect(process.env.DATABASE, { useNewUrlParser: true })
   .then(() => console.log('Database connected'))
   .catch(console.error);
 
@@ -46,7 +47,6 @@ app.post('/api/users/register', (req, res) => {
   user
     .save()
     .then(doc => {
-      console.log(doc);
       sendEmail(doc.email, doc.name, null, 'welcome');
       return Promise.resolve(doc);
     })
@@ -138,6 +138,62 @@ app.post('/api/users/update_profile', auth, async (req, res) => {
     return res.json({ success: false });
   } else {
     res.json({ success: true });
+  }
+});
+
+app.post('/api/users/reset_token', async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.json({ success: false, message: 'Email parameter required' });
+  }
+  // Find user
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.json({ success: false, message: 'Email parameter required' });
+  }
+
+  // Generate and save token
+  try {
+    const updatedUser = await user.generateResetToken();
+    // Send Email
+    await sendEmail(user.email, user.name, null, 'reset_password', user);
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(200).json({
+      success: false,
+      message: 'A message has occured while reseting the password'
+    });
+  }
+});
+app.post('/api/users/reset_password', async (req, res) => {
+  const { resetToken, password, confirmPassword } = req.body;
+  const today = moment()
+    .startOf('day')
+    .valueOf();
+  // Check password === confirmPassword
+  if (password !== confirmPassword) {
+    res.json({ success: false, message: 'Password doesn\'t match' });
+  }
+  const user = await User.findOne({
+    resetToken: resetToken,
+    resetTokenExp: {
+      $gte: today
+    }
+  });
+  if (!user) {
+    return res.json({ success: false, message: 'Token not valid' });
+  }
+
+  user.password = password;
+  try {
+    await user.save();
+    res.json({ success: true });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: 'An error has occured while reseting the password. Try again'
+    });
   }
 });
 
