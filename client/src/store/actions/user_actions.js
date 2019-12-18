@@ -7,7 +7,8 @@ import {
   REGISTER_USER,
   ADD_TO_CART,
   GET_CART_ITEMS,
-  REMOVE_CART_ITEM
+  REMOVE_CART_ITEM,
+  ON_SUCCESS_BUY
 } from './types';
 
 export function loginUser(dataToSubmit) {
@@ -76,19 +77,26 @@ export function getCartItems(cartItems, userCart) {
   return { type: GET_CART_ITEMS, payload: request };
 }
 
-
-export function removeCartItem (id) {
-  const request = axios.post(`${USER_SERVER}/removeFromCart`, {id})
-  .then(response=>{
-    const products = response.data.cartDetail;
-    const userCart = response.data.cart;
-    products.forEach(product => {
-      const cartItem = userCart.find(item => item.id === product._id);
-      if (cartItem) {
-        product.quantity = cartItem.quantity;
-      }
+export function removeCartItem(id) {
+  const request = axios
+    .post(`${USER_SERVER}/removeFromCart`, { id })
+    .then(response => {
+      const products = response.data.cartDetail;
+      const userCart = response.data.cart;
+      products.forEach(product => {
+        const cartItem = userCart.find(item => item.id === product._id);
+        if (cartItem) {
+          product.quantity = cartItem.quantity;
+        }
+      });
+      return products;
     });
-    return products;
-  })
-  return { type: REMOVE_CART_ITEM, payload: request}
+  return { type: REMOVE_CART_ITEM, payload: request };
+}
+
+export function onSuccessBuy(data) {
+  const request = axios
+    .post(`${USER_SERVER}/successBuy`, data)
+    .then(response => response.data);
+  return { type: ON_SUCCESS_BUY, payload: request };
 }

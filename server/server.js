@@ -31,6 +31,7 @@ const { User } = require('./models/user');
 const { Brand } = require('./models/brand');
 const { Wood } = require('./models/wood');
 const { Product } = require('./models/product');
+const { Payment } = require('./models/payment');
 const { auth } = require('./middleware/auth');
 const { admin } = require('./middleware/admin');
 // USERS
@@ -335,6 +336,58 @@ app.post('/api/users/removeFromCart', auth, async (req, res) => {
     return res.json({ success: false, error: 'Could not update the cart ' });
   }
 });
+
+app.post('/api/users/succsssBuy', auth, async (req, res) => {
+  let history = [];
+  let transactionData = {};
+
+  // User History
+  req.body.cartDetail.forEach(item => {
+    history.push({
+      dateOfPurchase: Date.now(),
+      name: item.name,
+      brand: item.brand.name,
+      id: item._id,
+      price: item.price,
+      quantity: item.quantity,
+      paymentId: req.body.paymentData.paymentID
+    });
+  });
+  // Payment information
+  transactionData.user = {
+    id: req.user._id,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    email: req.user.email
+  };
+  transactionData.data = req.body.paymentData;
+  transactionData.product = history;
+
+  const user = await User.findByIdAndUpdate(
+    { _id: req.user._id },
+    { $push: { history }, $set: { cart: [] } },
+    { new: true }
+  );
+  if (!user) {
+    return res.json({ success: false });
+  }
+  const payment = new Payment(transactionData);
+  const savedPayment = await payment.save();
+  if (!savedPayment) {
+    let products = [];
+    savedPayment.products.forEach(item =>
+      products.push({ id: item.id, quantity: item.quantity })
+    );
+    await Promise.all(
+      products.map(item =>
+        Product.update({ _id: item.id }, { $inc: { sold: 1 } })
+      ),
+      { new: false }
+    );
+  }
+  res.json({ success: true, cart: user.cart, cartDetail: []  });
+});
+
 app.get('/', (req, res) => {
   res.send('Hey');
 });

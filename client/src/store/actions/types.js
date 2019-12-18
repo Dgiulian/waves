@@ -23,3 +23,5 @@ export const ADD_WOOD = 'ADD_WOOD';
 
 export const GET_PRODUCT_DETAIL = 'GET_PRODUCT_DETAIL';
 export const CLEAR_PRODUCT_DETAIL = 'CLEAR_PRODUCT_DETAIL';
+
+export const ON_SUCCESS_BUY = 'ON_SUCCESS_BUY';
