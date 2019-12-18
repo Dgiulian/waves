@@ -14,6 +14,7 @@ import UserCart from './components/Cart';
 import UpdateProfile from './components/Dashboard/update_profile';
 import ManageSite from './components/Dashboard/Admin/manage_site';
 import PageNotFound from './components/utils/page_not_found';
+import AddFile from './components/Dashboard/add_file';
 
 const Routes = () => {
   return (
@@ -30,6 +31,11 @@ const Routes = () => {
           path="/admin/manage_categories"
           exact
           component={Auth(ManageCategories, true)}
+        />
+        <Route
+          path="/admin/add_file"
+          exact
+          component={Auth(AddFile, true)}
         />
         <Route
           path="/user/profile"

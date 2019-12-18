@@ -1,11 +1,11 @@
 require('dotenv').config();
-
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const formidable = require('express-formidable');
 const cloudinary = require('cloudinary');
-
+const multer = require('multer');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose
@@ -49,7 +49,7 @@ app.post('/api/users/register', (req, res) => {
       sendEmail(doc.email, doc.name, null, 'welcome');
       return Promise.resolve(doc);
     })
-    .then((doc) => res.json({ success: true, userdata: doc }))
+    .then(doc => res.json({ success: true, userdata: doc }))
     .catch(err => res.json({ success: false, err }));
 });
 
@@ -429,6 +429,34 @@ app.post('/api/site', auth, admin, async (req, res) => {
     { new: true }
   );
   res.json({ success: true, site: updatedSite });
+});
+
+//================================================================
+//                               UPLOAD
+//================================================================
+const storage = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`);
+  },
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    if (ext !== '.jpg' && ext !== '.png') {
+      return cb('Only jpg, png is allowed', false);
+    }
+    cb(null, true);
+  }
+});
+const upload = multer({ storage }).single('file');
+app.post('/api/users/uploadfile', auth, admin, (req, res) => {
+  upload(req, res, err => {
+    if (err) {
+      return res.json({ success: false });
+    }
+    return res.json({ success: true });
+  });
 });
 
 app.get('/', (req, res) => {
