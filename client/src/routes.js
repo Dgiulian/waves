@@ -13,21 +13,35 @@ import ProductPage from './components/Product';
 import UserCart from './components/Cart';
 import UpdateProfile from './components/Dashboard/update_profile';
 import ManageSite from './components/Dashboard/Admin/manage_site';
+import PageNotFound from './components/utils/page_not_found';
 
 const Routes = () => {
   return (
     <Layout>
       <Switch>
-        <Route path="/user/dashboard" component={Auth(Dashboard, true)} />
-        <Route path="/user/cart" component={Auth(UserCart, true)} />
-        <Route path="/admin/add_product" component={Auth(AddProduct, true)} />
+        <Route path="/user/dashboard" exact component={Auth(Dashboard, true)} />
+        <Route path="/user/cart" exact component={Auth(UserCart, true)} />
+        <Route
+          path="/admin/add_product"
+          exact
+          component={Auth(AddProduct, true)}
+        />
         <Route
           path="/admin/manage_categories"
+          exact
           component={Auth(ManageCategories, true)}
         />
-        <Route path="/user/profile" component={Auth(UpdateProfile, true)} />
-        <Route path="/admin/site_info" component={Auth(ManageSite, true)} />
-        
+        <Route
+          path="/user/profile"
+          exact
+          component={Auth(UpdateProfile, true)}
+        />
+        <Route
+          path="/admin/site_info"
+          exact
+          component={Auth(ManageSite, true)}
+        />
+
         <Route path="/register" exact component={Auth(Register, false)} />
         <Route path="/product/:id" exact component={Auth(ProductPage, null)} />
         <Route
@@ -35,8 +49,9 @@ const Routes = () => {
           exact
           component={Auth(RegisterLogin, false)}
         />
-        <Route path="/shop" component={Auth(Shop, null)} />
+        <Route path="/shop" exact component={Auth(Shop, null)} />
         <Route path="/" exact component={Auth(Home, null)} />
+        <Route component={PageNotFound} />
       </Switch>
     </Layout>
   );
