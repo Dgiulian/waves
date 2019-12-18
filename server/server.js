@@ -186,6 +186,8 @@ app.post('/api/users/reset_password', async (req, res) => {
   }
 
   user.password = password;
+  user.resetToken = '';
+  user.resetTokenExp = 0;
   try {
     await user.save();
     res.json({ success: true });
