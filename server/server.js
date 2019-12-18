@@ -32,6 +32,7 @@ const { Brand } = require('./models/brand');
 const { Wood } = require('./models/wood');
 const { Product } = require('./models/product');
 const { Payment } = require('./models/payment');
+const { Site } = require('./models/site');
 const { auth } = require('./middleware/auth');
 const { admin } = require('./middleware/admin');
 // USERS
@@ -400,6 +401,25 @@ app.post('/api/users/succsssBuy', auth, async (req, res) => {
     );
   }
   res.json({ success: true, cart: user.cart, cartDetail: [] });
+});
+// ================================================================
+//                            SITE
+// ================================================================
+app.get('/api/site', async (req, res) => {
+  const site = await Site.find({});
+  if (!site || site.length <= 0) {
+    return res.json({ success: false });
+  }
+  return res.json({ success: true, site: site[0].siteInfo });
+});
+
+app.post('/api/site', auth, admin, async (req, res) => {
+  const updatedSite = await Site.findOneAndUpdate(
+    { name: 'site' },
+    { $set: { siteInfo: req.body } },
+    { new: true }
+  );
+  res.json({ success: true, site: updatedSite });
 });
 
 app.get('/', (req, res) => {
