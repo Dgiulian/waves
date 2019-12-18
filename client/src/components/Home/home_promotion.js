@@ -9,15 +9,6 @@ const HomePromotion = () => {
     linkTitle: 'Shop now',
     linkTo: '/shop'
   };
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    arrows: false
-  };
   const renderPromotion = () =>
     promotion ? (
       <div
